@@ -14,8 +14,8 @@ import (
 
 var (
 	dpi      = flag.Float64("dpi", 72, "screen resolution in Dots Per Inch")
-	fontfile = flag.String("fontfile", "fonts/ClearSans-Regular.ttf", "filename of the ttf font")
-	size     = flag.Float64("size", 32, "font size in points")
+	fontfile = flag.String("fontfile", "fonts/NotoSans-Regular.ttf", "filename of the ttf font")
+	size     = flag.Float64("size", 48, "font size in points")
 	spacing  = flag.Float64("spacing", 1.5, "line spacing (e.g. 2 means double spaced)")
 )
 
@@ -31,7 +31,7 @@ func main() {
 
 	renderer, err := textrender.InitRenderer(fontfile, dpi, size, spacing)
 	if err != nil {
-		log.Println("Could not init textrenderer with fontfile", fontfile, " : ", err)
+		log.Println("Could not init textrenderer with fontfile", *fontfile, " : ", err)
 		return
 	}
 
