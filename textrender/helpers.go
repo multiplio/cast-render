@@ -25,5 +25,6 @@ func textWidth(text string, font *truetype.Font, fontSize *float64) (int, error)
 
 func textHeight(text []string, context *freetype.Context, size *float64, spacing *float64) int {
 	height := fixed.Int26_6(len(text)-1) * context.PointToFixed(*size**spacing)
+	height -= context.PointToFixed(*size * *spacing / 2)
 	return height.Ceil()
 }
