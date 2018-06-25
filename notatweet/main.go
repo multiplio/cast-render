@@ -3,74 +3,52 @@ package main
 import (
 	"github.com/WhoMeNope/notatweet/textrender"
 
-	"bufio"
 	"flag"
-	"fmt"
-	"image"
-	"image/png"
+	"github.com/valyala/fasthttp"
 	"log"
-	"os"
 )
 
 var (
 	dpi      = flag.Float64("dpi", 72, "screen resolution in Dots Per Inch")
 	fontfile = flag.String("fontfile", "fonts/NotoSans-Regular.ttf", "filename of the ttf font")
-	size     = flag.Float64("size", 48, "font size in points")
+	size     = flag.Float64("size", 42, "font size in points")
 	spacing  = flag.Float64("spacing", 1.5, "line spacing (e.g. 2 means double spaced)")
+	address  = flag.String("address", "localhost:3000", "http service address")
 )
 
 var text = []string{
-	"’Twas brillig, and the slithy toves",
-	"Did gyre and gimble in the wabe;",
-	"All mimsy were the borogoves,",
-	"And the mome raths outgrabe.",
+	"Arguing that you don't care about the",
+	"right to privacy because you have",
+	"nothing to hide is no different from",
+	"saying you don't care about free speech",
+	"because you have nothing to say.",
+	"- Edward Snowden",
 }
 
 func main() {
 	flag.Parse()
+	log.SetFlags(0)
 
 	renderer, err := textrender.InitRenderer(fontfile, dpi, size, spacing)
 	if err != nil {
-		log.Println("Could not init textrenderer with fontfile", *fontfile, " : ", err)
+		log.Fatal("Could not init textrenderer with fontfile", *fontfile, " : ", err)
 		return
 	}
 
-	// render
-	rgba, err := renderer.Render(text)
-	if err != nil {
-		log.Println("Could not render text", text, " : ", err)
-		return
+	// renderer context struct
+	h := &renderHandler{
+		renderer: &renderer,
 	}
 
-	// Save that RGBA image to disk.
-	err = writeToFile("out.png", rgba)
-	if err != nil {
-		log.Println(err)
-		return
-	} else {
-		fmt.Println("Wrote out.png OK.")
+	// request handler
+	requestHandler := func(ctx *fasthttp.RequestCtx) {
+		switch string(ctx.Path()) {
+		case "/render":
+			h.handleRender(ctx)
+		default:
+			ctx.Error("404 : path not found", fasthttp.StatusNotFound)
+		}
 	}
-}
-
-func writeToFile(filename string, image *image.RGBA) error {
-	outFile, err := os.Create(filename)
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-	defer outFile.Close()
-
-	b := bufio.NewWriter(outFile)
-	err = png.Encode(b, image)
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-	err = b.Flush()
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-
-	return err
+	log.Println("Serving at ", *address)
+	log.Fatal(fasthttp.ListenAndServe(*address, requestHandler))
 }
