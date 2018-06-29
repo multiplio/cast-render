@@ -14,8 +14,6 @@ type renderHandler struct {
 }
 
 func (h *renderHandler) handleRender(ctx *fasthttp.RequestCtx) {
-	// fmt.Fprintf(ctx, "Hello, world! Requested path is %q. Foobar is %q", ctx.Path(), h.foobar)
-
 	// render
 	rgba, err := h.renderer.Render(text)
 	if err != nil {

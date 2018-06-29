@@ -13,7 +13,7 @@ var (
 	fontfile = flag.String("fontfile", "fonts/NotoSans-Regular.ttf", "filename of the ttf font")
 	size     = flag.Float64("size", 42, "font size in points")
 	spacing  = flag.Float64("spacing", 1.5, "line spacing (e.g. 2 means double spaced)")
-	address  = flag.String("address", "localhost:3000", "http service address")
+	address  = flag.String("address", ":3000", "http service address")
 )
 
 var text = []string{

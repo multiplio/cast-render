@@ -1,0 +1,6 @@
+.git
+Dockerfile
+.dockerignore
+**/*.env
+**/*.vim
+**/.DS_Store
