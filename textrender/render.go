@@ -15,15 +15,13 @@ import (
 )
 
 type Renderer struct {
-	font    *truetype.Font
-	dpi     float64
-	size    float64
-	spacing float64
-	fg      *image.Uniform
-	bg      *image.Uniform
+	font *truetype.Font
+	dpi  float64
+	fg   *image.Uniform
+	bg   *image.Uniform
 }
 
-func InitRenderer(fontfile *string, dpi *float64, size *float64, spacing *float64) (Renderer, error) {
+func InitRenderer(fontfile *string, dpi *float64) (Renderer, error) {
 	fontBytes, err := ioutil.ReadFile(*fontfile)
 	if err != nil {
 		return Renderer{}, err
@@ -36,14 +34,12 @@ func InitRenderer(fontfile *string, dpi *float64, size *float64, spacing *float6
 	r := Renderer{}
 	r.font = f
 	r.dpi = *dpi
-	r.size = *size
-	r.spacing = *spacing
 	r.fg, r.bg = image.Black, image.White
 
 	return r, nil
 }
 
-func (r *Renderer) Render(text []string) (*image.RGBA, error) {
+func (r *Renderer) Render(text []string, size *float64, spacing *float64) (*image.RGBA, error) {
 	//Twitter requirements:
 	//Aspect ratio of 2:1 with minimum dimensions of 300x157 or maximum of 4096x4096 pixels.
 	//Images must be less than 5MB in size. JPG, PNG, WEBP and GIF formats are supported.
@@ -57,16 +53,16 @@ func (r *Renderer) Render(text []string) (*image.RGBA, error) {
 	c := freetype.NewContext()
 	c.SetDPI(r.dpi)
 	c.SetFont(r.font)
-	c.SetFontSize(r.size)
+	c.SetFontSize(*size)
 	c.SetClip(rgba.Bounds())
 	c.SetDst(rgba)
 	c.SetSrc(r.fg)
 	c.SetHinting(font.HintingNone)
 
 	// Draw the text.
-	pt := freetype.Pt(0, (imageHeight-textHeight(text, c, &r.size, &r.spacing))/2)
+	pt := freetype.Pt(0, (imageHeight-textHeight(text, c, size, spacing))/2)
 	for _, s := range text {
-		w, err := textWidth(s, r.font, &r.size)
+		w, err := textWidth(s, r.font, size)
 		if err != nil {
 			return image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight)), err
 		}
@@ -76,7 +72,7 @@ func (r *Renderer) Render(text []string) (*image.RGBA, error) {
 		if err != nil {
 			return image.NewRGBA(image.Rect(0, 0, imageWidth, imageHeight)), err
 		}
-		pt.Y += c.PointToFixed(r.size * r.spacing)
+		pt.Y += c.PointToFixed(*size * *spacing)
 	}
 
 	return rgba, nil

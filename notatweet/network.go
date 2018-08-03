@@ -7,6 +7,7 @@ import (
 	"image/png"
 	"log"
 	"os"
+	"strings"
 )
 
 type renderHandler struct {
@@ -14,10 +15,36 @@ type renderHandler struct {
 }
 
 func (h *renderHandler) handleRender(ctx *fasthttp.RequestCtx) {
-	// render
-	rgba, err := h.renderer.Render(text)
+	var (
+		text    []string
+		size    float64
+		spacing float64
+		err     error
+	)
+
+	// get params
+	args := ctx.QueryArgs()
+	log.Println("Parsing query args : ", args)
+
+	if args.Has("text") {
+		rawtext := string(args.Peek("text"))
+		text = strings.Split(rawtext, "\n")
+	}
+	size, err = args.GetUfloat("size")
 	if err != nil {
-		log.Println("Could not render text", text, " : ", err)
+		log.Println("Could not get params : ", err)
+		return
+	}
+	spacing, err = args.GetUfloat("spacing")
+	if err != nil {
+		log.Println("Could not get params : ", err)
+		return
+	}
+
+	// render
+	rgba, err := h.renderer.Render(text, &size, &spacing)
+	if err != nil {
+		log.Println("Could not render : ", text, " : ", err)
 		return
 	}
 
