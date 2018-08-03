@@ -1,5 +1,5 @@
 # Builder
-FROM golang:1.7.3 as builder
+FROM golang:1.10.3 as builder
 
 WORKDIR /go/src/github.com/WhoMeNope/notatweet
 RUN go get -d -v golang.org/x/image/font \
