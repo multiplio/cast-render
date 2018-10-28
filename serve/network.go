@@ -1,17 +1,18 @@
 package main
 
 import (
-	"github.com/WhoMeNope/notatweet/textrender"
+	"github.com/WhoMeNope/renderer/render"
 
-	"github.com/valyala/fasthttp"
 	"image/png"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/valyala/fasthttp"
 )
 
 type renderHandler struct {
-	renderer *textrender.Renderer
+	renderer *render.Renderer
 }
 
 func (h *renderHandler) handleRender(ctx *fasthttp.RequestCtx) {

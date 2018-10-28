@@ -1,7 +1,8 @@
-package textrender
+package render
 
 import (
 	"fmt"
+
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/math/fixed"

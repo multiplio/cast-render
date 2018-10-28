@@ -1,4 +1,4 @@
-package textrender
+package render
 
 // Copyright 2010 The Freetype-Go Authors. All rights reserved.
 // Use of this source code is governed by the GNU General Public License

@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/WhoMeNope/notatweet/textrender"
+	"github.com/WhoMeNope/renderer/render"
 
 	"flag"
-	"github.com/valyala/fasthttp"
 	"log"
+
+	"github.com/valyala/fasthttp"
 )
 
 var (
@@ -20,9 +21,9 @@ func main() {
 	log.SetFlags(0)
 	log.SetPrefix(*name + ":")
 
-	renderer, err := textrender.InitRenderer(fontfile, dpi)
+	renderer, err := render.InitRenderer(fontfile, dpi)
 	if err != nil {
-		log.Fatal("Could not init textrenderer with fontfile", *fontfile, " : ", err)
+		log.Fatal("Could not init render with fontfile", *fontfile, " : ", err)
 		return
 	}
 
