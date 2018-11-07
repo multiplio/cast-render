@@ -4,11 +4,16 @@ version=1.0.0
 
 .PHONY:build
 build:
-	docker image build -t ${repo}/${name}:${version} .
+	docker image build \
+		-t ${repo}/${name}:${version} \
+		.
 
 .PHONY:run
 run:
-	docker container run --name ${repo}-${name}-dev -p 3000:3000 -t ${repo}/${name}:${version}
+	docker container run \
+		--name ${repo}-${name}-dev \
+		-p 3000:3000 \
+		-t ${repo}/${name}:${version}
 
 .PHONY:kill
 kill:
