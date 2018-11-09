@@ -1,0 +1,14 @@
+sudo: required
+
+language: go
+go:
+  - "1.10.3"
+
+services:
+  - docker
+
+script:
+  - make build
+  - make run
+  - docker ps -a
+  - make kill
