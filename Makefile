@@ -11,6 +11,7 @@ build:
 .PHONY:run
 run:
 	docker container run \
+		-d \
 		--name ${repo}-${name}-dev \
 		-p 3000:3000 \
 		-t ${repo}/${name}:${version}
