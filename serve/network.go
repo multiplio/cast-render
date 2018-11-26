@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/WhoMeNope/renderer/render"
+	"github.com/tekwrks/renderer/render"
 
 	"image/png"
 	"log"

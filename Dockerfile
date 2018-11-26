@@ -1,7 +1,7 @@
 # Builder
 FROM golang:1.10.3 as builder
 
-WORKDIR /go/src/github.com/WhoMeNope/renderer
+WORKDIR /go/src/github.com/tekwrks/renderer
 
 RUN go get -d -v golang.org/x/image/font \
  && go get -d -v golang.org/x/image/math/fixed \
@@ -21,8 +21,8 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
-COPY --from=builder /go/src/github.com/WhoMeNope/renderer/serve/fonts ./fonts
-COPY --from=builder /go/src/github.com/WhoMeNope/renderer/app .
+COPY --from=builder /go/src/github.com/tekwrks/renderer/serve/fonts ./fonts
+COPY --from=builder /go/src/github.com/tekwrks/renderer/app .
 
 EXPOSE 3000
 ENTRYPOINT ["./app"]
