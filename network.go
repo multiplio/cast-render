@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/tekwrks/renderer/render"
-
 	"fmt"
 	// "image/png"
 	"log"
@@ -11,6 +9,8 @@ import (
 
 	ipfs "github.com/ipfs/go-ipfs-api"
 	"github.com/valyala/fasthttp"
+
+	"github.com/tekwrks/renderer/render"
 )
 
 type renderHandler struct {
