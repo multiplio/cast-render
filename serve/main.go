@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/tekwrks/renderer/render"
-
 	"flag"
 	"log"
 
+	env "github.com/Netflix/go-env"
+	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/valyala/fasthttp"
+
+	"github.com/tekwrks/renderer/render"
 )
 
 var (
@@ -16,26 +18,45 @@ var (
 	name     = flag.String("alias", "renderer", "program name")
 )
 
+type environment struct {
+	IPFSAddress string `env:"IPFS_ADDRESS"`
+}
+
 func main() {
+	// get command line options
 	flag.Parse()
+
+	// setup logger
 	log.SetFlags(0)
 	log.SetPrefix(*name + ":")
 
+	// get environment
+	var environment environment
+	_, err := env.UnmarshalFromEnviron(&environment)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// init renderer
 	renderer, err := render.InitRenderer(fontfile, dpi)
 	if err != nil {
 		log.Fatal("Could not init render with fontfile", *fontfile, " : ", err)
 		return
 	}
 
+	// create ipfs shell
+	shell := shell.NewShell(environment.IPFSAddress)
+
 	// renderer context struct
 	h := &renderHandler{
 		renderer: &renderer,
+		shell:    shell,
 	}
 
 	// request handler
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		switch string(ctx.Path()) {
-		case "/render":
+		case "/post":
 			h.handleRender(ctx)
 		default:
 			ctx.Error("404 : path not found", fasthttp.StatusNotFound)

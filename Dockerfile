@@ -7,7 +7,9 @@ RUN go get -d -v golang.org/x/image/font \
  && go get -d -v golang.org/x/image/math/fixed \
  && go get -d -v github.com/golang/freetype \
  && go get -d -v github.com/golang/freetype/truetype \
- && go get -d -v github.com/valyala/fasthttp
+ && go get -d -v github.com/valyala/fasthttp \
+ && go get -d -v github.com/ipfs/go-ipfs-api \
+ && go get -d -v github.com/Netflix/go-env
 
 COPY render ./render
 RUN GOPATH=/go GOOS=linux CGO_ENABLED=0 go install -a -installsuffix cgo ./render
