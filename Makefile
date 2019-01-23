@@ -3,8 +3,11 @@ repo=quackup
 name=renderer
 version=1.0.0
 
+.PHONY:all
+all: build image
+
 .PHONY:image
-image: build
+image:
 	docker image build \
 		-t ${repo}/${name}:${version} \
 		.
