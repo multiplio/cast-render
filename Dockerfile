@@ -1,30 +1,27 @@
 # Builder
-FROM golang:1.10.3 as builder
+FROM golang:1.11.4 as builder
 
-WORKDIR /go/src/github.com/tekwrks/renderer
+WORKDIR /renderer
 
-RUN go get -d -v golang.org/x/image/font \
- && go get -d -v golang.org/x/image/math/fixed \
- && go get -d -v github.com/golang/freetype \
- && go get -d -v github.com/golang/freetype/truetype \
- && go get -d -v github.com/valyala/fasthttp \
- && go get -d -v github.com/ipfs/go-ipfs-api \
- && go get -d -v github.com/Netflix/go-env
+# Force the go compiler to use modules
+ENV GO111MODULE=on
+# We want to populate the module cache based on the go.{mod,sum} files.
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
-COPY render ./render
-RUN GOPATH=/go GOOS=linux CGO_ENABLED=0 go install -a -installsuffix cgo ./render
-
-COPY serve ./serve
-RUN GOPATH=/go GOOS=linux CGO_ENABLED=0 go build -a -installsuffix cgo -o app ./serve
+# Copy the rest of the source code
+COPY . .
+# Compile the project
+RUN GOPATH=/go GOOS=linux CGO_ENABLED=0 go install -a -installsuffix cgo .
 
 # Deploy
 FROM alpine:latest
-
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /root/
-COPY --from=builder /go/src/github.com/tekwrks/renderer/serve/fonts ./fonts
-COPY --from=builder /go/src/github.com/tekwrks/renderer/app .
+WORKDIR /app/
+COPY --from=builder /renderer/fonts ./fonts
+COPY --from=builder /go/bin/renderer .
 
 EXPOSE 3000
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["/app/renderer"]

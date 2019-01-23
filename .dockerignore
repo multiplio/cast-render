@@ -2,6 +2,11 @@
 
 Dockerfile
 .dockerignore
+.gitignore
+
+*.md
+.travis.yml
+Makefile
 
 .env
 **/*.env
