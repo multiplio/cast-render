@@ -15,6 +15,7 @@ run:
 		-d \
 		--name ${repo}-${name}-dev \
 		-p 3000:3000 \
+		--env-file .env \
 		-t ${repo}/${name}:${version}
 
 .PHONY:kill

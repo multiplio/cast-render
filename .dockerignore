@@ -1,6 +1,10 @@
 .git
+
 Dockerfile
 .dockerignore
+
+.env
 **/*.env
+
 **/*.vim
 **/.DS_Store
