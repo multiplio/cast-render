@@ -64,6 +64,8 @@ github.com/multiformats/go-multihash v1.0.8/go.mod h1:sT17phG+xVgnrZc8ht/ZoCIV0s
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
+github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87 h1:u7uCM+HS2caoEKSPtSFQvvUDXQtqZdu3MYtF+QEw7vA=
+github.com/qiangxue/fasthttp-routing v0.0.0-20160225050629-6ccdc2a18d87/go.mod h1:zwr0xP4ZJxwCS/g2d+AUOUwfq/j2NC7a1rK3F0ZbVYM=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72 h1:qLC7fQah7D6K1B0ujays3HV9gkFtllcxhzImRR7ArPQ=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=

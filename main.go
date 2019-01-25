@@ -6,6 +6,7 @@ import (
 
 	env "github.com/Netflix/go-env"
 	shell "github.com/ipfs/go-ipfs-api"
+	"github.com/qiangxue/fasthttp-routing"
 	"github.com/valyala/fasthttp"
 
 	"github.com/tekwrks/renderer/render"
@@ -44,24 +45,17 @@ func main() {
 		return
 	}
 
-	// create ipfs shell
-	shell := shell.NewShell(environment.IPFSAddress)
-
 	// renderer context struct
-	h := &renderHandler{
+	renderContext := &renderContext{
 		renderer: &renderer,
-		shell:    shell,
+		shell:    shell.NewShell(environment.IPFSAddress),
 	}
 
-	// request handler
-	requestHandler := func(ctx *fasthttp.RequestCtx) {
-		switch string(ctx.Path()) {
-		case "/post":
-			h.handleRender(ctx)
-		default:
-			ctx.Error("404 : path not found", fasthttp.StatusNotFound)
-		}
-	}
+	// routes
+	router := routing.New()
+	setRoutes(router, renderContext)
+
+	// start server
 	log.Println("Serving at ", *address)
-	log.Fatal(fasthttp.ListenAndServe(*address, requestHandler))
+	log.Fatal(fasthttp.ListenAndServe(*address, router.HandleRequest))
 }

@@ -21,7 +21,7 @@ run:
 	docker container run \
 		-d --rm \
 		--name ${repo}-${name}-dev \
-		-p 3000:3000 \
+		-p 5000:3000 \
 		--env-file .env \
 		-t ${repo}/${name}:${version}
 
