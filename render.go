@@ -20,8 +20,8 @@ type renderContext struct {
 type post struct {
 	Description string  `json:"description"`
 	Content     string  `json:"content"`
-	FontSize    float64 `json:"fontSize,string"`
-	Spacing     float64 `json:"spacing,string"`
+	FontSize    float64 `json:"fontSize"`
+	Spacing     float64 `json:"spacing"`
 }
 
 func (r *renderContext) handleRender(c *routing.Context) error {
