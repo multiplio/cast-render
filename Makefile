@@ -1,7 +1,5 @@
-projectID=tekwrks
-repo=quackup
+project=tekwrks
 name=renderer
-version=1.0.0
 
 .PHONY:all
 all: build image
@@ -9,7 +7,7 @@ all: build image
 .PHONY:image
 image:
 	docker image build \
-		-t ${repo}/${name}:${version} \
+		-t ${project}/${name}:latest \
 		.
 
 .PHONY:build
@@ -20,23 +18,14 @@ build:
 run:
 	docker container run \
 		-d --rm \
-		--name ${repo}-${name}-dev \
+		--name ${project}-${name}-dev \
 		-p 5000:3000 \
 		--env-file .env \
-		-t ${repo}/${name}:${version}
+		-t ${project}/${name}:latest
 
 .PHONY:kill
 kill:
 	docker kill $$( \
 		docker ps -aq \
-			--filter="name=${repo}-${name}-dev" )
-
-.PHONY: push
-push:
-	set -ex;
-	docker tag \
-		${repo}/${name}:${version} \
-		gcr.io/${projectID}/${name}:${version}
-	docker push \
-		gcr.io/${projectID}/${name}:${version}
+			--filter="name=${project}-${name}-dev" )
 
