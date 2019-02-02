@@ -21,6 +21,7 @@ var (
 
 type environment struct {
 	IPFSAddress string `env:"IPFS_ADDRESS"`
+	RootUrl     string `env:"ROOT_URL"`
 }
 
 func main() {

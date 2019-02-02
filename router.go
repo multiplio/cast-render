@@ -7,7 +7,11 @@ import (
 func setRoutes(router *routing.Router, renderContext *renderContext) {
 
 	router.Get("/post/<hash>", func(context *routing.Context) error {
-		return renderContext.handleRender(context)
+		return renderContext.handleTwitter(context)
+	})
+
+	router.Get("/post/<hash>/image", func(context *routing.Context) error {
+		return renderContext.handleImage(context)
 	})
 
 }

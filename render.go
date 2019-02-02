@@ -17,6 +17,26 @@ type renderContext struct {
 	renderer *render.Renderer
 }
 
+func (r *renderContext) handleTwitter(c *routing.Context) error {
+	hash := c.Param("hash")
+	log.Println("Got hash :", hash)
+
+	page := `
+	<!doctype html>
+		<head>
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="og:title" content="Hello World" />
+			<meta name="og:image" content="` + environment.RootUrl + `/post/` + hash + `/image` + `">
+		</head>
+		<body>
+		</body>
+	</html>
+	`
+
+	fmt.Fprintf(c, page)
+	return nil
+}
+
 type post struct {
 	Description string  `json:"description"`
 	Content     string  `json:"content"`
@@ -24,14 +44,9 @@ type post struct {
 	Spacing     float64 `json:"spacing"`
 }
 
-func (r *renderContext) handleRender(c *routing.Context) error {
+func (r *renderContext) handleImage(c *routing.Context) error {
 	hash := c.Param("hash")
 	log.Println("Got hash :", hash)
-
-	// TODO : validate hash
-	// if len(hash) != 58 {
-	// 	return routing.NewHTTPError(400)
-	// }
 
 	// get post from ipfs
 	block, err := r.shell.BlockGet("/ipfs/" + hash)
@@ -39,8 +54,6 @@ func (r *renderContext) handleRender(c *routing.Context) error {
 		log.Println("error:", err)
 		return routing.NewHTTPError(400, "No post found.")
 	}
-
-	// []byte to json
 	var post post
 	err = json.Unmarshal(block, &post)
 	if err != nil {
