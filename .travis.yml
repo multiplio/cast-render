@@ -17,6 +17,9 @@ cache:
 services:
   - docker
 
+before_script:
+  - make test
+
 script:
   - make image
 

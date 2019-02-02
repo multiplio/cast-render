@@ -19,10 +19,12 @@ var (
 	name     = flag.String("alias", "renderer", "program name")
 )
 
-type environment struct {
+type environmentDesc struct {
 	IPFSAddress string `env:"IPFS_ADDRESS"`
-	RootUrl     string `env:"ROOT_URL"`
+	RootURL     string `env:"ROOT_URL"`
 }
+
+var environment environmentDesc
 
 func main() {
 	// get command line options
@@ -33,7 +35,6 @@ func main() {
 	log.SetPrefix(*name + ":")
 
 	// get environment
-	var environment environment
 	_, err := env.UnmarshalFromEnviron(&environment)
 	if err != nil {
 		log.Fatal(err)
