@@ -15,7 +15,7 @@ build:
 	go build ./...
 
 .PHONY:test
-test:
+test: build
 	go test
 
 .PHONY:run
