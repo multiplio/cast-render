@@ -4,6 +4,7 @@ env:
   global:
     - PROJECT_NAME=tekwrks
     - DOCKER_IMAGE_NAME=renderer
+    - GO111MODULE=on
 
 language: go
 go:
@@ -18,10 +19,10 @@ services:
   - docker
 
 before_script:
-  - make test
+  - env GO111MODULE=on make test
 
 script:
-  - make image
+  - env GO111MODULE=on make image
 
 before_deploy:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
