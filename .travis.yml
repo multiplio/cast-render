@@ -29,10 +29,11 @@ before_deploy:
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
   - gcloud --quiet components update
+  - git clone https://github.com/tekwrks/MANAGE
 
 deploy:
   - provider: script
-    script: ./push.sh
+    script: chmod 500 ./MANAGE/gcloud/push.sh && ./MANAGE/gcloud/push.sh
     skip_cleanup: true
     on:
       branch: master
