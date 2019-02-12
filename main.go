@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 
 	env "github.com/Netflix/go-env"
@@ -12,27 +11,19 @@ import (
 	"github.com/tekwrks/renderer/render"
 )
 
-var (
-	dpi      = flag.Float64("dpi", 72, "screen resolution in Dots Per Inch")
-	fontfile = flag.String("fontfile", "fonts/NotoSans-Regular.ttf", "filename of the ttf font")
-	address  = flag.String("address", ":3000", "http service address")
-	name     = flag.String("alias", "renderer", "program name")
-)
-
 type environmentDesc struct {
-	IPFSAddress string `env:"IPFS_ADDRESS"`
-	RootURL     string `env:"ROOT_URL"`
+	Name        string  `env:"NAME"`
+	Address     string  `env:"ADDRESS"`
+	DPI         float64 `env:"DPI"`
+	FontFile    string  `env:"FONTFILE"`
+	IPFSAddress string  `env:"IPFS_ADDRESS"`
+	RootURL     string  `env:"ROOT_URL"`
 }
 
 var environment environmentDesc
 
 func main() {
-	// get command line options
-	flag.Parse()
-
-	// setup logger
 	log.SetFlags(0)
-	log.SetPrefix(*name + ":")
 
 	// get environment
 	_, err := env.UnmarshalFromEnviron(&environment)
@@ -40,10 +31,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.SetPrefix(environment.Name + ":")
+
 	// init renderer
-	renderer, err := render.InitRenderer(fontfile, dpi)
+	renderer, err := render.InitRenderer(&environment.FontFile, &environment.DPI)
 	if err != nil {
-		log.Fatal("Could not init render with fontfile", *fontfile, " : ", err)
+		log.Fatal("Could not init render with fontfile", environment.FontFile, " : ", err)
 		return
 	}
 
@@ -58,6 +51,6 @@ func main() {
 	setRoutes(router, renderContext)
 
 	// start server
-	log.Println("Serving at ", *address)
-	log.Fatal(fasthttp.ListenAndServe(*address, router.HandleRequest))
+	log.Println("Serving at ", environment.Address)
+	log.Fatal(fasthttp.ListenAndServe(environment.Address, router.HandleRequest))
 }
