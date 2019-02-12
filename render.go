@@ -39,6 +39,7 @@ func (r *renderContext) handleTwitter(c routingContext) error {
 	</html>
 	`
 
+	c.Response.Header.SetContentType("text/html; charset=utf-8")
 	fmt.Fprintf(c, page)
 	return nil
 }
