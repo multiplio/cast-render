@@ -13,32 +13,30 @@ import (
 	"github.com/tekwrks/renderer/render"
 )
 
-type routingContext interface {
-	Param(string) string
-	Write([]byte) (int, error)
-}
-
 type renderContext struct {
 	shell    *ipfs.Shell
 	renderer *render.Renderer
 }
 
-func (r *renderContext) handleTwitter(c routingContext) error {
+func (r *renderContext) handleTwitter(c *routing.Context) error {
 	hash := c.Param("hash")
 	log.Println("Got hash :", hash)
+
+	imagePath := environment.RootURL + "/post/" + hash + "/image"
 
 	page := `
 	<!doctype HTML>
 		<head>
 			<meta name="twitter:card" content="summary_large_image" />
 			<meta name="og:title" content="Hello World" />
-			<meta name="og:image" content="` + environment.RootURL + `/post/` + hash + `/image` + `">
+			<meta name="og:image" content="` + imagePath + `">
 		</head>
 		<body>
+			<img alt="" src="` + imagePath + `" />
+			Cast by tekwrks
 		</body>
 	</html>
 	`
-
 	c.Response.Header.SetContentType("text/html; charset=utf-8")
 	fmt.Fprintf(c, page)
 	return nil
@@ -51,7 +49,7 @@ type post struct {
 	Spacing     float64 `json:"spacing"`
 }
 
-func (r *renderContext) handleImage(c routingContext) error {
+func (r *renderContext) handleImage(c *routing.Context) error {
 	hash := c.Param("hash")
 	log.Println("Got hash :", hash)
 
