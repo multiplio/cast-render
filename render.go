@@ -51,6 +51,10 @@ type post struct {
 
 func (r *renderContext) handleImage(c *routing.Context) error {
 	hash := c.Param("hash")
+	if hash == "" {
+		log.Println("No hash in url")
+		return routing.NewHTTPError(400, "Provide a post hash.")
+	}
 	log.Println("Got hash :", hash)
 
 	// get post from ipfs
