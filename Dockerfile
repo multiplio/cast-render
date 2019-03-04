@@ -21,7 +21,12 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /app/
 COPY --from=builder /renderer/fonts ./fonts
+COPY --from=builder /renderer/templates ./templates
 COPY --from=builder /go/bin/renderer .
+
+# defaults
+ENV FONTFILE=fonts/NotoSans-Regular.ttf
+ENV POST_TEMPLATE=templates/post.mustache
 
 EXPOSE 3000
 ENTRYPOINT ["/app/renderer"]

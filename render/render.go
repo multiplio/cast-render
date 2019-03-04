@@ -31,12 +31,12 @@ func InitRenderer(fontfile *string, dpi *float64) (Renderer, error) {
 		return Renderer{}, err
 	}
 
-	r := Renderer{}
-	r.font = f
-	r.dpi = *dpi
-	r.fg, r.bg = image.Black, image.White
-
-	return r, nil
+	return Renderer{
+		font: f,
+		dpi:  *dpi,
+		fg:   image.Black,
+		bg:   image.White,
+	}, nil
 }
 
 func (r *Renderer) Render(text []string, size *float64, spacing *float64) (*image.RGBA, error) {

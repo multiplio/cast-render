@@ -4,11 +4,34 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer?ref=badge_shield)
 [![Go Report Card](https://goreportcard.com/badge/github.com/tekwrks/renderer)](https://goreportcard.com/report/github.com/tekwrks/renderer)
 
-To build and run:
+Render posts from IPFS into html, linkable to social media sites.
+
+## Environment (with defaults)
 ```
-make && make run
+NAME=
+ADDRESS=
+
+DPI=
+FONTFILE=fonts/NotoSans-Regular.ttf
+
+POST_TEMPLATE=templates/post.mustache
+
+IPFS_ADDRESS=
+ROOT_URL=
 ```
 
+## Routes
+```
+get /ready => for kubernetes readiness probe
+
+get /post/<hash> => formatted html of post (determined by POST_TEMPLATE)
+
+get /post/<hash>/image => renderer post image
+```
+
+## Dependencies
+
+Expects IPFS blocks in the following format:
 ```
 At <IPFS_HASH>:
 
@@ -19,8 +42,6 @@ At <IPFS_HASH>:
   spacing:     1.5,
 }
 ```
-
-Navigate to: [http://localhost:3000/post/IPFS_HASH](http://localhost:3000/post/<IPFS_HASH>) and you should see 'Hello World!' in big friendly letters.
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer?ref=badge_large)
