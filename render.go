@@ -26,7 +26,7 @@ func (r *renderContext) handleTwitter(c *routing.Context) error {
 
 	imagePath := environment.RootURL + "/post/" + hash + "/image"
 
-	page, err := mustache.Render(r.postTemplate, map[string]string{
+	page, err := mustache.Render(*r.postTemplate, map[string]string{
 		"imagePath": imagePath,
 		"title":     "cast by multipl",
 	})

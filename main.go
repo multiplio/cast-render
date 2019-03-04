@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 
 	env "github.com/Netflix/go-env"
@@ -43,7 +44,7 @@ func main() {
 	}
 
 	// read post template
-	postBytes, err := ioutil.ReadFile(*template)
+	postBytes, err := ioutil.ReadFile(environment.PostTemplate)
 	if err != nil {
 		log.Fatal("Could not read template", environment.PostTemplate, ":", err)
 		return
