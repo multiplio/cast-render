@@ -12,12 +12,13 @@ import (
 )
 
 type environmentDesc struct {
-	Name        string `env:"NAME"`
-	Address     string `env:"ADDRESS"`
-	DPI         int    `env:"DPI"`
-	FontFile    string `env:"FONTFILE"`
-	IPFSAddress string `env:"IPFS_ADDRESS"`
-	RootURL     string `env:"ROOT_URL"`
+	Name         string `env:"NAME"`
+	Address      string `env:"ADDRESS"`
+	DPI          int    `env:"DPI"`
+	PostTemplate string `env:"POST_TEMPLATE"`
+	FontFile     string `env:"FONTFILE"`
+	IPFSAddress  string `env:"IPFS_ADDRESS"`
+	RootURL      string `env:"ROOT_URL"`
 }
 
 var environment environmentDesc
@@ -37,14 +38,23 @@ func main() {
 	dpi := float64(environment.DPI)
 	renderer, err := render.InitRenderer(&environment.FontFile, &dpi)
 	if err != nil {
-		log.Fatal("Could not init render with fontfile", environment.FontFile, " : ", err)
+		log.Fatal("Could not init renderer with fontfile", environment.FontFile, ":", err)
 		return
 	}
 
+	// read post template
+	postBytes, err := ioutil.ReadFile(*template)
+	if err != nil {
+		log.Fatal("Could not read template", environment.PostTemplate, ":", err)
+		return
+	}
+	post := string(postBytes)
+
 	// renderer context struct
 	renderContext := &renderContext{
-		renderer: &renderer,
-		shell:    shell.NewShell(environment.IPFSAddress),
+		renderer:     &renderer,
+		shell:        shell.NewShell(environment.IPFSAddress),
+		postTemplate: &post,
 	}
 
 	// routes

@@ -7,6 +7,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/cbroglie/mustache"
 	ipfs "github.com/ipfs/go-ipfs-api"
 	"github.com/qiangxue/fasthttp-routing"
 
@@ -14,8 +15,9 @@ import (
 )
 
 type renderContext struct {
-	shell    *ipfs.Shell
-	renderer *render.Renderer
+	shell        *ipfs.Shell
+	renderer     *render.Renderer
+	postTemplate *string
 }
 
 func (r *renderContext) handleTwitter(c *routing.Context) error {
@@ -24,19 +26,15 @@ func (r *renderContext) handleTwitter(c *routing.Context) error {
 
 	imagePath := environment.RootURL + "/post/" + hash + "/image"
 
-	page := `
-	<!doctype HTML>
-		<head>
-			<meta name="twitter:card" content="summary_large_image" />
-			<meta name="og:title" content="Hello World" />
-			<meta name="og:image" content="` + imagePath + `">
-		</head>
-		<body>
-			<img alt="" src="` + imagePath + `" />
-			Cast by tekwrks
-		</body>
-	</html>
-	`
+	page, err := mustache.Render(r.postTemplate, map[string]string{
+		"imagePath": imagePath,
+		"title":     "cast by multipl",
+	})
+	if err != nil {
+		log.Println("error:", err)
+		return routing.NewHTTPError(400, "Could not render post.")
+	}
+
 	c.Response.Header.SetContentType("text/html; charset=utf-8")
 	fmt.Fprintf(c, page)
 	return nil
