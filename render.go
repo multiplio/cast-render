@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/multiplio/cast-render/render"
+
 	"encoding/json"
 	"fmt"
 	"image/png"
@@ -10,8 +12,6 @@ import (
 	"github.com/cbroglie/mustache"
 	ipfs "github.com/ipfs/go-ipfs-api"
 	"github.com/qiangxue/fasthttp-routing"
-
-	"github.com/tekwrks/renderer/render"
 )
 
 type renderContext struct {
