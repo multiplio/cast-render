@@ -1,5 +1,5 @@
-project=tekwrks
-name=renderer
+project=multipl
+name=cast-render
 
 .PHONY:all
 all: build image
@@ -21,9 +21,9 @@ test: build
 .PHONY:run
 run:
 	docker container run \
-		-d --rm \
+		--rm \
 		--name ${project}-${name}-dev \
-		-p 5000:3000 \
+		-p 3000:3000 \
 		--env-file .env \
 		-t ${project}/${name}:latest
 
