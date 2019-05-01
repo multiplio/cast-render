@@ -1,14 +1,13 @@
-# IPFS2Png render+serve
+# IPFS2Png render
 
-[![Build Status](https://travis-ci.org/tekwrks/renderer.svg?branch=master)](https://travis-ci.org/tekwrks/renderer)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer?ref=badge_shield)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tekwrks/renderer)](https://goreportcard.com/report/github.com/tekwrks/renderer)
+[![Build Status](https://travis-ci.org/multiplio/cast-render.svg?branch=master)](https://travis-ci.org/multiplio/cast-render)
+[![Go Report Card](https://goreportcard.com/badge/github.com/multiplio/cast-render)](https://goreportcard.com/report/github.com/multiplio/cast-render)
 
 Render posts from IPFS into html, linkable to social media sites.
 
 ## Environment (with defaults)
 ```
-NAME=
+NAME=render
 ADDRESS=
 
 DPI=
@@ -26,22 +25,18 @@ get /ready => for kubernetes readiness probe
 
 get /post/<hash> => formatted html of post (determined by POST_TEMPLATE)
 
-get /post/<hash>/image => renderer post image
+get /post/<hash>/image => rendered post image
 ```
 
 ## Dependencies
 
 Expects IPFS blocks in the following format:
 ```
-At <IPFS_HASH>:
-
 {
   content:     "Hello World!",
-  description: "description",
-  fontSize:    22,
+  description: "Template message.",
+  fontSize:    36,
   spacing:     1.5,
 }
 ```
 
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftekwrks%2Frenderer?ref=badge_large)
