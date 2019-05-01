@@ -2,8 +2,8 @@ sudo: required
 
 env:
   global:
-    - PROJECT_NAME=tekwrks
-    - DOCKER_IMAGE_NAME=renderer
+    - PROJECT_NAME=multipl
+    - DOCKER_IMAGE_NAME=cast-render
     - GO111MODULE=on
 
 language: go
