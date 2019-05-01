@@ -1,7 +1,7 @@
 # Builder
-FROM golang:1.11.5 as builder
+FROM golang:1.12 as builder
 
-WORKDIR /renderer
+WORKDIR /cast-render
 
 # Force the go compiler to use modules
 ENV GO111MODULE=on
@@ -20,13 +20,13 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /app/
-COPY --from=builder /renderer/fonts ./fonts
-COPY --from=builder /renderer/templates ./templates
-COPY --from=builder /go/bin/renderer .
+COPY --from=builder /cast-render/fonts ./fonts
+COPY --from=builder /cast-render/templates ./templates
+COPY --from=builder /go/bin/cast-render .
 
 # defaults
 ENV FONTFILE=fonts/NotoSans-Regular.ttf
 ENV POST_TEMPLATE=templates/post.mustache
 
 EXPOSE 3000
-ENTRYPOINT ["/app/renderer"]
+ENTRYPOINT ["/app/cast-render"]

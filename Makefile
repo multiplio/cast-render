@@ -21,7 +21,7 @@ test: build
 .PHONY:run
 run:
 	docker container run \
-		-d --rm \
+		--rm \
 		--name ${project}-${name}-dev \
 		-p 3000:3000 \
 		--env-file .env \
