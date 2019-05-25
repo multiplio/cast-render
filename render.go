@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/cbroglie/mustache"
+	cid "github.com/ipfs/go-cid"
 	ipfs "github.com/ipfs/go-ipfs-api"
 	"github.com/qiangxue/fasthttp-routing"
 )
@@ -48,15 +49,23 @@ type post struct {
 }
 
 func (r *renderContext) handleImage(c *routing.Context) error {
+	// get and validate hash
 	hash := c.Param("hash")
 	if hash == "" {
 		log.Println("No hash in url")
 		return routing.NewHTTPError(400, "Provide a post hash.")
 	}
-	log.Println("Got hash :", hash)
+
+	// Create a cid from a marshaled string
+	cid, err := cid.Decode(hash)
+	if err != nil {
+		log.Println("Hash is not valid cid")
+		return routing.NewHTTPError(400, "Provide a valid post hash.")
+	}
+	log.Println("Got cid :", cid)
 
 	// get post from ipfs
-	block, err := r.shell.BlockGet("/ipfs/" + hash)
+	block, err := r.shell.BlockGet("/ipfs/" + cid.String())
 	if err != nil {
 		log.Println("error:", err)
 		return routing.NewHTTPError(400, "No post found.")
@@ -72,7 +81,7 @@ func (r *renderContext) handleImage(c *routing.Context) error {
 	lines := strings.Split(post.Content, "\n")
 	rgba, err := r.renderer.Render(lines, &post.FontSize, &post.Spacing)
 	if err != nil {
-		log.Println("Could not render : ", hash, " : ", err)
+		log.Println("Could not render : ", cid, " : ", err)
 		return routing.NewHTTPError(400, "Not a post.")
 	}
 
